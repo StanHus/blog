@@ -1,5 +1,9 @@
-import Image from "next/image"
+import NextImage, { ImageProps } from "next/image"
 import { useMDXComponent } from "next-contentlayer/hooks"
+
+function Image(props: ImageProps) {
+  return <NextImage {...props} style={{ height: 'auto', ...props.style }} />
+}
 
 const components = {
   Image,

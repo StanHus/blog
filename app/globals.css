@@ -1,3 +1,58 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Smooth theme transitions */
+html {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* View Transitions API - Forward direction (default) */
+::view-transition-old(root) {
+  animation: 150ms ease-out both fade-out, 150ms ease-out both slide-to-left;
+}
+
+::view-transition-new(root) {
+  animation: 210ms ease-in 90ms both fade-in, 300ms ease-out both slide-from-right;
+}
+
+/* View Transitions API - Back direction */
+html[data-transition-direction="back"]::view-transition-old(root) {
+  animation: 150ms ease-out both fade-out, 150ms ease-out both slide-to-right;
+}
+
+html[data-transition-direction="back"]::view-transition-new(root) {
+  animation: 210ms ease-in 90ms both fade-in, 300ms ease-out both slide-from-left;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+@keyframes slide-from-right {
+  from { transform: translateX(30px); opacity: 0; }
+}
+
+@keyframes slide-to-left {
+  to { transform: translateX(-30px); opacity: 0; }
+}
+
+@keyframes slide-from-left {
+  from { transform: translateX(-30px); opacity: 0; }
+}
+
+@keyframes slide-to-right {
+  to { transform: translateX(30px); opacity: 0; }
+}

@@ -5,9 +5,54 @@ import { useTheme } from "next-themes"
 export function ModeToggle() {
   const { setTheme, theme } = useTheme()
 
+  const handleToggle = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const newTheme = theme === "light" ? "dark" : "light"
+    const direction = theme === "light" ? "forward" : "back"
+    
+    // Check if View Transitions API is supported
+    if (!document.startViewTransition) {
+      setTheme(newTheme)
+      return
+    }
+
+    // Get click coordinates for the circle reveal
+    const x = e.clientX
+    const y = e.clientY
+    
+    // Set CSS custom properties for the animation origin
+    document.documentElement.style.setProperty('--x', `${x}px`)
+    document.documentElement.style.setProperty('--y', `${y}px`)
+    document.documentElement.setAttribute('data-transition-direction', direction)
+
+    // Start the view transition
+    const transition = document.startViewTransition(() => {
+      setTheme(newTheme)
+    })
+
+    await transition.ready
+
+    // Apply circle reveal animation
+    document.documentElement.animate(
+      {
+        clipPath: [
+          `circle(0px at ${x}px ${y}px)`,
+          `circle(${Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          )}px at ${x}px ${y}px)`,
+        ],
+      },
+      {
+        duration: 400,
+        easing: 'ease-out',
+        pseudoElement: '::view-transition-new(root)',
+      }
+    )
+  }
+
   return (
     <button
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onClick={handleToggle}
       className="border rounded-md w-6 h-6 flex items-center justify-center">
       <span className="sr-only">Toggle mode</span>
       {theme !== "dark" ? (
