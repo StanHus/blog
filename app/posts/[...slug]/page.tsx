@@ -57,13 +57,18 @@ export default async function PostPage({ params }: PostProps) {
   return (
     <article className="py-6 prose dark:prose-invert">
       <h1 className="mb-2">{post.title}</h1>
-      <div className="flex gap-1.5 mb-3 not-prose">
-        <span className={`text-[10px] w-20 text-center px-1.5 py-0.5 rounded ${tagStyles.topic}`}>
-          {post.topic}
-        </span>
-        <span className={`text-[10px] w-20 text-center px-1.5 py-0.5 rounded ${tagStyles.stance}`}>
-          {post.stance}
-        </span>
+      <div className="flex items-center gap-3 mb-3 not-prose">
+        <time className="text-[11px] text-slate-500 dark:text-slate-400">
+          {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+        </time>
+        <div className="flex gap-1.5">
+          <span className={`text-[10px] w-20 text-center px-1.5 py-0.5 rounded ${tagStyles.topic}`}>
+            {post.topic}
+          </span>
+          <span className={`text-[10px] w-20 text-center px-1.5 py-0.5 rounded ${tagStyles.stance}`}>
+            {post.stance}
+          </span>
+        </div>
       </div>
       {post.description && (
         <p className="text-xl mt-0 text-slate-700 dark:text-slate-200">
