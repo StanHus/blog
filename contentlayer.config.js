@@ -44,6 +44,21 @@ export const Post = defineDocumentType(() => ({
       type: "date",
       required: true,
     },
+    type: {
+      type: "enum",
+      options: ["opinion", "essay", "guide", "analysis"],
+      required: true,
+    },
+    topic: {
+      type: "enum",
+      options: ["ai", "leadership", "psychology", "strategy"],
+      required: true,
+    },
+    stance: {
+      type: "enum",
+      options: ["observational", "contrarian", "debatable"],
+      required: true,
+    },
   },
   computedFields,
 }))
