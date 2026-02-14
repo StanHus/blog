@@ -1,0 +1,527 @@
+---
+title: What Actually Makes OpenClaw Different
+description: The architectural decisions that turn OpenClaw into a composable agent runtime.
+date: "2026-02-14"
+topic: ai
+stance: debatable
+---
+
+<div className="not-prose text-center py-6 mb-8 border-b border-slate-200 dark:border-slate-800">
+  <div className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-4">
+    Not the standard stuff. The genuinely unique architectural decisions
+    that enable autonomous, architectural-level agent work.
+  </div>
+  <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-md bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800/50">
+    Skip the marketing. This is the technical truth.
+  </span>
+</div>
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">The Core Insight</div>
+
+## It's Not About Features. It's About Composability.
+
+Most agent frameworks bolt features onto an LLM API wrapper. OpenClaw inverts this: the agent runtime is a *composition engine* where identity, context, tools, policies, and skills combine dynamically per-turn.
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-semibold mb-3">Standard Agent Runtimes</div>
+    <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+      <li><span className="text-red-400 mr-1.5">×</span> Static system prompt</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Fixed tool list</li>
+      <li><span className="text-red-400 mr-1.5">×</span> One set of permissions</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Crash on failure</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Single credential</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Agent = LLM + tools</li>
+    </ul>
+  </div>
+  <div className="rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-green-500 dark:text-green-400 font-semibold mb-3">OpenClaw Runtime</div>
+    <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+      <li><span className="text-green-500 mr-1.5">✓</span> Dynamic context injection per turn</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Tools filtered by 7-layer policy</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Permissions vary by channel/group/session</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Graceful degradation at every layer</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Multi-credential rotation with failover</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Agent = Identity + Context + Tools + Skills + Policy</li>
+    </ul>
+  </div>
+</div>
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">The key realization:</strong> an agent that can do architectural work needs to understand <em>who it is</em>, <em>what it knows</em>, <em>what it can do</em>, and <em>what it should do</em>—all of which should adapt based on context, not be hardcoded.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">Unique Factor #1</div>
+
+## Workspace-Rooted Identity
+
+The agent isn't just "Claude with tools." It has a persistent identity defined by workspace files that are loaded and injected every turn.
+
+```
+~/.openclaw/workspace/
+├── SOUL.md         ← Core personality, values, style
+├── IDENTITY.md     ← Who this agent is, its purpose
+├── USER.md         ← User preferences and context
+├── MEMORY.md       ← Long-term memories and facts
+├── TOOLS.md        ← Notes on available tools
+├── HEARTBEAT.md    ← Scheduled behaviors
+├── AGENTS.md       ← Contributor guidelines
+│
+├── memory/
+│   ├── 2024-01-15.md  ← Daily logs, searchable
+│   └── 2024-01-16.md
+│
+└── skills/
+    └── my-custom-skill/
+```
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">Why this matters:</strong> before every turn, the agent reads its identity files. It's not starting fresh—it's resuming as a <em>persistent entity</em> with memory, personality, and accumulated knowledge about you and your projects.
+  </div>
+</div>
+
+```js
+// Dynamic system prompt construction (simplified)
+const systemPrompt = [
+  await readFile("SOUL.md"),       // Who am I?
+  await readFile("IDENTITY.md"),   // What's my purpose?
+  await readFile("USER.md"),       // Who am I talking to?
+  await readFile("MEMORY.md"),     // What do I remember?
+  await loadEligibleSkills(),      // What can I do right now?
+  await getRuntimeContext(),       // What environment am I in?
+].join("\n\n");
+```
+
+This is why OpenClaw agents feel **coherent** across sessions. The identity persists. You're not re-explaining yourself every conversation.
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">Unique Factor #2</div>
+
+## Skills Are Knowledge Packages, Not Just Tools
+
+A tool is a function the agent can call. A skill is a complete knowledge package: instructions, prerequisites, installation specs, eligibility rules, and contextual guidance.
+
+```yaml
+# skills/calendar/skill.yaml
+name: calendar
+description: Google Calendar integration
+
+requires:
+  bins: [gcal-cli]            # Binary must exist
+  env: [GOOGLE_CLIENT_ID]     # Env var must be set
+  config: [calendar.enabled]  # Config must be true
+
+install:
+  brew: gcal-cli              # How to install on macOS
+  npm: gcal-cli               # How to install via npm
+
+os: [darwin, linux]           # Only on these OSes
+
+user-invocable: true          # Invoke via /calendar
+command-dispatch: tool        # Deterministic tool mapping
+```
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">🔍</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Eligibility Checking</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Skills are filtered at runtime. If <code>gcal-cli</code> isn't installed, the calendar skill isn't offered. No broken tool calls.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">📦</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Self-Installing</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Skills can specify how to install dependencies. The agent can bootstrap itself.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">🎯</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Context-Aware</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">SKILL.md instructions are injected only when the skill is eligible. No bloated prompts.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">📚</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Composable</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Skills can reference other skills. Complex workflows emerge from simple building blocks.</div>
+  </div>
+</div>
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">The difference:</strong> standard tools are "here's a function signature." Skills are "here's everything you need to know to use this capability effectively, and the system will only show you this if you can actually use it."
+  </div>
+</div>
+
+Multi-source resolution with precedence means you can override bundled skills with your own:
+
+<div className="not-prose flex items-center gap-1.5 flex-wrap my-6 p-3 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+  <span className="text-xs font-mono px-2 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">Extra</span>
+  <span className="text-orange-500 font-bold text-xs">→</span>
+  <span className="text-xs font-mono px-2 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">Bundled</span>
+  <span className="text-orange-500 font-bold text-xs">→</span>
+  <span className="text-xs font-mono px-2 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">Managed</span>
+  <span className="text-orange-500 font-bold text-xs">→</span>
+  <span className="text-xs font-mono px-2 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">Personal</span>
+  <span className="text-orange-500 font-bold text-xs">→</span>
+  <span className="text-xs font-mono px-2 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">Project</span>
+  <span className="text-orange-500 font-bold text-xs">→</span>
+  <span className="text-xs font-mono px-2 py-1 rounded bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300">Workspace</span>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">Unique Factor #3</div>
+
+## Seven-Layer Policy Filtering
+
+Tool permissions aren't global. They're computed per invocation through a seven-layer policy stack.
+
+```
+TOOL POLICY RESOLUTION (per tool call)
+
+Agent calls: bash("rm -rf node_modules")
+
+  Layer 1 │ Profile Policy
+          │ Is this tool allowed for this profile?
+          ▼
+  Layer 2 │ Provider Profile
+          │ Does the model provider support this?
+          ▼
+  Layer 3 │ Global Policy
+          │ Is this tool globally enabled/disabled?
+          ▼
+  Layer 4 │ Agent Policy
+          │ Does this specific agent have access?
+          ▼
+  Layer 5 │ Group Policy
+          │ Different rules for group chats vs DMs?
+          ▼
+  Layer 6 │ Sandbox Policy
+          │ Does the workspace sandbox allow this?
+          ▼
+  Layer 7 │ Subagent Policy
+          │ If spawned, what did parent allow?
+          ▼
+  RESULT  → ALLOWED or DENIED (with reason)
+```
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">Real-world scenario:</strong> your "work" agent on Slack can use Jira tools. The same model on Discord cannot—because the Group Policy layer filters by channel. No code changes, just config.
+  </div>
+</div>
+
+```yaml
+# Different policies per context
+agents:
+  default:
+    tools:
+      bash:
+        allowlist: ["npm *", "git *", "pnpm *"]
+        denylist: ["rm -rf /", "sudo *"]
+      file_write:
+        allow_paths: ["~/projects/**"]
+        deny_paths: ["**/.env", "**/.ssh/**"]
+
+groups:
+  "discord:#random":
+    tools:
+      bash: false  # No bash in casual channels
+```
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">Unique Factor #4</div>
+
+## Agents Can Spawn Agents
+
+This is the big one. The `sessions_spawn` tool enables fully autonomous multi-agent orchestration. Parent agents can delegate to child agents.
+
+```
+USER: "Review this PR, check security, deploy if safe"
+
+  ┌─────────────────────────────────────────┐
+  │           PARENT AGENT                  │
+  │                                         │
+  │  "I'll decompose into subtasks..."      │
+  │                                         │
+  │  spawn("Review PR",   spawn("Security  │
+  │    agent: reviewer)     audit",         │
+  │         │               agent: sec)     │
+  └─────────┼───────────────────┼───────────┘
+            ▼                   ▼
+  ┌──────────────────┐ ┌──────────────────┐
+  │  CODE REVIEWER   │ │  SECURITY AGENT  │
+  │  • Own prompt    │ │  • Own prompt    │
+  │  • Own session   │ │  • Own tools     │
+  │  • Isolated      │ │  • Isolated      │
+  │  Result: ✓       │ │  Result: ✓       │
+  └────────┬─────────┘ └────────┬─────────┘
+           └──────────┬─────────┘
+                      ▼
+  ┌─────────────────────────────────────────┐
+  │           PARENT AGENT                  │
+  │                                         │
+  │  "Both passed. Deploying..."            │
+  │                                         │
+  │  spawn("Deploy to prod",               │
+  │    agent: devops, thinking: medium)     │
+  └─────────────────────────────────────────┘
+```
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">🔀</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Parallel Execution</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Spawn multiple subagents simultaneously. Parent continues while children work.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">🎭</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Specialized Agents</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Each subagent has its own identity, tools, and thinking level. Right tool for right job.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">🛡️</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Policy Inheritance</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Subagents inherit group policies. Parent can't escalate privileges via spawning.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-orange-300 dark:hover:border-orange-700 transition-colors">
+    <div className="text-lg mb-1">📝</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Result Aggregation</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Results announce back to parent for synthesis. Full context preserved.</div>
+  </div>
+</div>
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">This enables architectural work:</strong> complex tasks decompose naturally. The agent thinks "I need architecture review, then implementation, then testing" and spawns specialized agents for each phase. It's orchestrated collaboration, not one agent doing everything.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">Unique Factor #5</div>
+
+## Graceful Degradation Everywhere
+
+Most agent systems crash on errors. OpenClaw has fallback chains at every layer. This is critical for autonomous work—the agent needs to recover, not fail.
+
+<div className="not-prose space-y-3 my-6">
+  <div className="flex items-start gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+    <span className="text-2xl font-extrabold text-orange-500 dark:text-orange-400 leading-none shrink-0">1</span>
+    <div>
+      <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-0.5">Thinking Level Fallback</div>
+      <div className="text-xs text-slate-500 dark:text-slate-400">If the model doesn't support "high" thinking, automatically try "medium", then "low". Never fail on capability mismatch.</div>
+    </div>
+  </div>
+  <div className="flex items-start gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+    <span className="text-2xl font-extrabold text-orange-500 dark:text-orange-400 leading-none shrink-0">2</span>
+    <div>
+      <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-0.5">Auth Profile Rotation</div>
+      <div className="text-xs text-slate-500 dark:text-slate-400">Multiple API credentials per provider. Hit rate limits? Cooldown and try next. All fail? Trigger fallback model chain.</div>
+    </div>
+  </div>
+  <div className="flex items-start gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+    <span className="text-2xl font-extrabold text-orange-500 dark:text-orange-400 leading-none shrink-0">3</span>
+    <div>
+      <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-0.5">Context Auto-Compaction</div>
+      <div className="text-xs text-slate-500 dark:text-slate-400">When context window fills, intelligently compact history. Preserve critical tool results, summarize the rest. Never truncate blindly.</div>
+    </div>
+  </div>
+  <div className="flex items-start gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+    <span className="text-2xl font-extrabold text-orange-500 dark:text-orange-400 leading-none shrink-0">4</span>
+    <div>
+      <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-0.5">Tool Result Truncation</div>
+      <div className="text-xs text-slate-500 dark:text-slate-400">If compaction fails, gracefully truncate oversized tool results rather than crashing. Agent can re-request if needed.</div>
+    </div>
+  </div>
+</div>
+
+```
+FAILURE RECOVERY CHAIN
+
+  API call fails
+       │
+       ▼
+  Retry with   ──▶  Try next     ──▶  Try next
+  same creds        credential        credential
+                                          │
+                          All credentials exhausted
+                                          │
+                                          ▼
+                         Trigger fallback model chain
+                         (try different provider)
+                                          │
+                                          ▼
+                         Downgrade thinking level
+                         if needed
+                                          │
+                                          ▼
+                         SUCCESS (recovered)
+                         or FAIL (gracefully, with reason)
+```
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">Why this enables autonomy:</strong> an agent doing a 2-hour architectural task can't afford to crash at hour 1.5 because of a rate limit. Recovery isn't a nice-to-have—it's mandatory.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">Unique Factor #6</div>
+
+## Hook-Based Interception
+
+Every tool call passes through hooks. Plugins can intercept, modify, or block any operation. This enables human-in-the-loop without breaking agent flow.
+
+```
+Agent: "I'll delete the old deployment..."
+
+  Tool call: bash("kubectl delete deployment old-app")
+                    │
+                    ▼
+  ┌──────────────────────────────────────────┐
+  │  before:tool-call hook                   │
+  │                                          │
+  │  • Log the command                       │
+  │  • Check if destructive → ask approval   │
+  │  • Modify parameters if needed           │
+  │  • Block if policy violated              │
+  │                                          │
+  │  ┌──────────────────────────────────┐    │
+  │  │ Push notification to your phone: │    │
+  │  │ "Agent wants to run:             │    │
+  │  │  kubectl delete deployment ..."  │    │
+  │  │                                  │    │
+  │  │ [Approve]  [Deny]  [Modify]      │    │
+  │  └──────────────────────────────────┘    │
+  └──────────────────────────────────────────┘
+                    │
+                    ▼
+          Tool executes (if approved)
+                    │
+                    ▼
+  ┌──────────────────────────────────────────┐
+  │  after:tool-call hook                    │
+  │                                          │
+  │  • Log result                            │
+  │  • Transform output                      │
+  │  • Trigger side effects                  │
+  │  • Update audit trail                    │
+  └──────────────────────────────────────────┘
+```
+
+```ts
+// Custom approval hook
+export const approvalHook = {
+  "before:tool-call": async (tool, params, ctx) => {
+    if (isDestructive(tool, params)) {
+      const approved = await ctx.requestApproval({
+        title: `Confirm: ${tool}`,
+        body: JSON.stringify(params, null, 2),
+        timeout: 120000,
+      });
+
+      if (!approved) {
+        throw new Error("User denied operation");
+      }
+    }
+  },
+};
+```
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">The balance:</strong> hooks let you maintain oversight without micromanaging. The agent proposes, you approve (or auto-approve for safe operations). Agentic autonomy with human control where it matters.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">The Synthesis</div>
+
+## Why These Factors Combine Uniquely
+
+None of these features alone is revolutionary. The power is in how they compose.
+
+```
+THE OPENCLAW COMPOSITION
+
+  Workspace Identity    → "I know who I am"
+        +
+  Skills as Knowledge   → "I know what I can do"
+        +
+  Policy Filtering      → "I know what I should do"
+        +
+  Agent Spawning        → "I can delegate"
+        +
+  Graceful Degradation  → "I can recover"
+        +
+  Hook Interception     → "Human stays in control"
+
+  ════════════════════════════════════════════
+                        │
+                        ▼
+
+  An agent that does complex, multi-step,
+  architectural work autonomously—while
+  remaining safe and controllable.
+
+  Not "Claude with extra tools."
+  An execution environment for agent cognition.
+```
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">The fundamental insight:</strong> OpenClaw treats the agent not as an API to call, but as an <em>entity that exists in a context</em>. That context—identity, skills, policies, capabilities—is computed fresh every turn. This is why it can handle architectural decisions: it has the <em>situated awareness</em> that architectural work requires.
+  </div>
+</div>
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-semibold mb-3">API Wrapper Agents</div>
+    <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+      <li><span className="text-red-400 mr-1.5">×</span> Static context</li>
+      <li><span className="text-red-400 mr-1.5">×</span> One-shot tool lists</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Fail on errors</li>
+      <li><span className="text-red-400 mr-1.5">×</span> No delegation</li>
+      <li><span className="text-red-400 mr-1.5">×</span> No persistent identity</li>
+      <li><span className="text-red-400 mr-1.5">×</span> No contextual permissions</li>
+    </ul>
+  </div>
+  <div className="rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-green-500 dark:text-green-400 font-semibold mb-3">OpenClaw Agents</div>
+    <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+      <li><span className="text-green-500 mr-1.5">✓</span> Dynamic context per turn</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Eligible skills only</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Multi-layer recovery</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Full multi-agent orchestration</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Persistent workspace identity</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Seven-layer policy filtering</li>
+    </ul>
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-orange-500 dark:text-orange-400 font-semibold mb-1">The Bottom Line</div>
+
+## It's About Situated Agency
+
+OpenClaw's unique contribution isn't any single feature. It's the recognition that **effective agents need to be situated**—they need context, identity, capabilities, and constraints that adapt to where they are and what they're doing.
+
+<div className="not-prose border-l-3 border-orange-400 dark:border-orange-500 bg-orange-50/50 dark:bg-orange-950/20 rounded-r-lg p-4 my-6 space-y-3" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">Standard agents:</strong> "Here's a prompt and some tools. Good luck."
+  </div>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-orange-600 dark:text-orange-400">OpenClaw agents:</strong> "Here's who you are (SOUL.md), what you know (MEMORY.md), who you're talking to (USER.md), what you can do right now (eligible skills), what you're allowed to do here (7-layer policy), who you can ask for help (spawnable agents), and how to recover if things go wrong (fallback chains). Now, go do great work."
+  </div>
+</div>
+
+That's what enables the architectural, autonomous, independent decision-making. Not magic—<span className="bg-orange-50 dark:bg-orange-950/50 text-orange-600 dark:text-orange-400 px-1 py-0.5 rounded text-sm font-medium">situated agency</span>.
