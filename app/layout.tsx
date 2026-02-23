@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
   title: "Stan Huseletov",
-  description: "VP of AI | Full Stack & GenAI Developer | Founder",
+  description: "VP of AI Center of Excellence at Trilogy. AI researcher and prototyper.",
 }
 
 interface RootLayoutProps {
