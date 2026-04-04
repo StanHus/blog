@@ -12,17 +12,17 @@ const tagStyles = {
 type Tab = "professional" | "personal"
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>("professional")
+  const [activeTab, setActiveTab] = useState<Tab>("personal")
 
   const filteredPosts = allPosts
-    .filter((post) => (post.category ?? "professional") === activeTab)
+    .filter((post) => (post.category ?? "personal") === activeTab)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 
   return (
     <div>
       {/* Underline tabs */}
       <div className="flex gap-6 border-b border-slate-200 dark:border-slate-800 mb-8 not-prose">
-        {(["professional", "personal"] as Tab[]).map((tab) => (
+        {(["personal", "professional"] as Tab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
