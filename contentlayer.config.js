@@ -54,6 +54,10 @@ export const Post = defineDocumentType(() => ({
       options: ["observational", "contrarian", "debatable"],
       required: true,
     },
+    category: {
+      type: "enum",
+      options: ["personal", "professional", "archive"],
+    },
   },
   computedFields,
 }))
