@@ -9,7 +9,7 @@ const tagStyles = {
   stance: "bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300",
 }
 
-type Tab = "personal" | "professional"
+type Tab = "professional" | "personal"
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<Tab>("professional")
@@ -20,19 +20,19 @@ export default function Home() {
 
   return (
     <div>
-      {/* Toggle */}
-      <div className="flex gap-1 mb-8 p-1 bg-slate-100 dark:bg-slate-800 rounded-lg w-fit not-prose">
+      {/* Underline tabs */}
+      <div className="flex gap-6 border-b border-slate-200 dark:border-slate-800 mb-8 not-prose">
         {(["professional", "personal"] as Tab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-1.5 text-sm rounded-md capitalize transition-all ${
+            className={`pb-2 text-sm capitalize transition-colors relative ${
               activeTab === tab
-                ? "bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 shadow-sm"
-                : "text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200"
+                ? "text-slate-900 dark:text-slate-50 font-medium after:absolute after:bottom-[-1px] after:left-0 after:right-0 after:h-[2px] after:bg-slate-900 dark:after:bg-slate-50"
+                : "text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300"
             }`}
           >
-            {tab}
+            {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </button>
         ))}
       </div>
