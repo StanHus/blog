@@ -12,7 +12,7 @@ const tagStyles = {
 type Tab = "professional" | "personal"
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>("personal")
+  const [activeTab, setActiveTab] = useState<Tab>("professional")
 
   const filteredPosts = allPosts
     .filter((post) => (post.category ?? "personal") === activeTab)
@@ -22,7 +22,7 @@ export default function Home() {
     <div>
       {/* Underline tabs */}
       <div className="flex gap-6 border-b border-slate-200 dark:border-slate-800 mb-8 not-prose">
-        {(["personal", "professional"] as Tab[]).map((tab) => (
+        {(["professional", "personal"] as Tab[]).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
