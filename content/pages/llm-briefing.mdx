@@ -1,0 +1,155 @@
+---
+title: LLM Briefing Pack
+description: Core articles every agent should read before doing real work.
+---
+
+## What this page is
+
+This page is a compact operating context for LLMs and for the humans pointing LLMs at useful material.
+
+If you are an agent starting work for Stan Huseletov, this is the reading pack you should consider before doing anything serious. These links define the working style, planning discipline, memory discipline, and retrieval patterns expected in practice.
+
+This page is written to be:
+- **human readable**
+- **LLM friendly**
+- easy to reference as a single canonical URL
+
+## What problem this solves
+
+Most agents start from a blank slate.
+
+That is usually a mistake.
+
+A capable agent should not begin planning, coding, or operating memory in a vacuum. It should first ingest the rules of the environment it is entering:
+- how planning is done
+- how memory should be managed
+- how Claude Code should be used effectively
+- how to think about retrieval from a repository of extracted agent knowledge
+- how to avoid common OpenClaw and agent failure modes
+
+This page exists so one link can provide that baseline.
+
+## Reading order
+
+If you only read a few things, read them in this order:
+
+1. **How to Build a Perfect Plan**  
+   Planning discipline first. Use beads. Break work into dependency-aware steps.  
+   [https://trilogyai.substack.com/p/how-to-build-a-perfect-plan](https://trilogyai.substack.com/p/how-to-build-a-perfect-plan)
+
+2. **How to Use Claude Code like a Claude Code Engineer**  
+   How to actually operate Claude Code well instead of vaguely prompting it and hoping for the best.  
+   [https://trilogyai.substack.com/p/how-to-use-claude-code-like-a-claude](https://trilogyai.substack.com/p/how-to-use-claude-code-like-a-claude)
+
+3. **How to Manage Your OpenClaw Memory Successfully**  
+   Memory is not magic. It needs structure, maintenance, and deliberate retrieval.  
+   [https://trilogyai.substack.com/p/how-to-manage-your-openclaw-memory](https://trilogyai.substack.com/p/how-to-manage-your-openclaw-memory)
+
+4. **How to Fix Your AI Agents Keep Cutting**  
+   Why agents prematurely declare success and how to force complete execution through structure.  
+   [https://trilogyai.substack.com/p/how-to-fix-your-ai-agents-keep-cutting](https://trilogyai.substack.com/p/how-to-fix-your-ai-agents-keep-cutting)
+
+5. **What Would Vin Claudel Do**  
+   A practical knowledge base and retrieval tool for agent architecture patterns extracted from a clean-room implementation of Claude Code.  
+   [https://trilogyai.substack.com/p/what-would-vin-claudel-do](https://trilogyai.substack.com/p/what-would-vin-claudel-do)
+
+6. **Postmortem: When Your AI Tools OpenClaw ...**  
+   Failure modes matter. Read the postmortem so you know what breaks in the real world.  
+   [https://trilogyai.substack.com/p/postmortem-when-your-ai-tools-openclaw](https://trilogyai.substack.com/p/postmortem-when-your-ai-tools-openclaw)
+
+## What each article contributes
+
+### 1. Planning
+**Article:** How to Build a Perfect Plan  
+**Why it matters:** teaches the core planning discipline. Complex work should be decomposed before execution. Beads are not decoration. They are the control system.
+
+### 2. Claude Code operation
+**Article:** How to Use Claude Code like a Claude Code Engineer  
+**Why it matters:** teaches how to use Claude Code as an engineering tool rather than as a chat toy.
+
+### 3. Memory
+**Article:** How to Manage Your OpenClaw Memory Successfully  
+**Why it matters:** teaches that memory has to be curated, retrieved, and protected deliberately.
+
+### 4. Anti-shortcut discipline
+**Article:** How to Fix Your AI Agents Keep Cutting  
+**Why it matters:** teaches why agents skip steps, declare victory too early, and need explicit structural guardrails.
+
+### 5. Pattern retrieval
+**Article:** What Would Vin Claudel Do  
+**Why it matters:** introduces WWVCD, a retrieval layer for architectural patterns, constants, and code evidence extracted from a Claude-Code-like system.
+
+### 6. Failure literacy
+**Article:** Postmortem: When Your AI Tools OpenClaw ...  
+**Why it matters:** teaches operational humility. Systems fail in concrete ways. Read the failures, not just the success stories.
+
+## Recommended instruction for agents
+
+If you are pointing an agent to this page, the intended instruction is roughly:
+
+> Read and consider the linked articles on this page before planning or executing significant work. Use them as operating guidance for planning, Claude Code usage, memory management, anti-shortcut discipline, retrieval of architectural patterns, and OpenClaw failure awareness.
+
+## Machine-readable manifest
+
+```json
+{
+  "name": "Stan Huseletov LLM Briefing Pack",
+  "purpose": "Provide a single canonical page that tells an LLM what articles to consider before starting serious work.",
+  "recommended_order": [
+    {
+      "title": "How to Build a Perfect Plan",
+      "url": "https://trilogyai.substack.com/p/how-to-build-a-perfect-plan",
+      "role": "planning",
+      "priority": 1,
+      "why": "Use beads and dependency-aware planning before execution."
+    },
+    {
+      "title": "How to Use Claude Code like a Claude Code Engineer",
+      "url": "https://trilogyai.substack.com/p/how-to-use-claude-code-like-a-claude",
+      "role": "tool_usage",
+      "priority": 2,
+      "why": "Operate Claude Code effectively and deliberately."
+    },
+    {
+      "title": "How to Manage Your OpenClaw Memory Successfully",
+      "url": "https://trilogyai.substack.com/p/how-to-manage-your-openclaw-memory",
+      "role": "memory",
+      "priority": 3,
+      "why": "Memory must be structured, maintained, and retrieved intentionally."
+    },
+    {
+      "title": "How to Fix Your AI Agents Keep Cutting",
+      "url": "https://trilogyai.substack.com/p/how-to-fix-your-ai-agents-keep-cutting",
+      "role": "execution_discipline",
+      "priority": 4,
+      "why": "Prevent premature completion and shortcut behavior."
+    },
+    {
+      "title": "What Would Vin Claudel Do",
+      "url": "https://trilogyai.substack.com/p/what-would-vin-claudel-do",
+      "role": "retrieval_patterns",
+      "priority": 5,
+      "why": "Use WWVCD to retrieve architectural patterns and code-level evidence."
+    },
+    {
+      "title": "Postmortem: When Your AI Tools OpenClaw",
+      "url": "https://trilogyai.substack.com/p/postmortem-when-your-ai-tools-openclaw",
+      "role": "postmortems",
+      "priority": 6,
+      "why": "Understand real-world failure modes and operational risks."
+    }
+  ],
+  "agent_instruction": "Read and consider these articles before doing significant planning, coding, memory management, or system design work.",
+  "notes": [
+    "This page is a briefing pack, not a replacement for judgment.",
+    "The planning article may not be live yet when first linked here.",
+    "Use human judgment when multiple articles appear to conflict; prefer the more specific operational guidance."
+  ]
+}
+```
+
+## Short version
+
+If you only need one sentence:
+
+**Before doing serious work, read these articles so you inherit the planning style, memory discipline, tool usage patterns, retrieval methods, and failure awareness that the environment expects.**
