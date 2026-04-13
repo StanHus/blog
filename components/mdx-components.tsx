@@ -1,5 +1,6 @@
 import NextImage, { ImageProps } from "next/image"
 import { useMDXComponent } from "next-contentlayer/hooks"
+import { CopyButton } from "./copy-button"
 
 function Image(props: ImageProps) {
   return <NextImage {...props} style={{ height: 'auto', ...props.style }} />
@@ -7,6 +8,7 @@ function Image(props: ImageProps) {
 
 const components = {
   Image,
+  CopyButton,
 }
 
 interface MdxProps {
