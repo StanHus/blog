@@ -1,0 +1,282 @@
+---
+title: What Makes Gas Town Different
+description: Four genuine innovations that enable autonomous multi-agent systems.
+date: "2026-02-25"
+topic: ai
+stance: debatable
+category: professional
+---
+
+<div className="not-prose text-center py-6 mb-8 border-b border-slate-200 dark:border-slate-800">
+  <div className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-4">
+    Not complexity. Four simple ideas applied consistently that enable
+    20-30 agents working autonomously for days.
+  </div>
+  <span className="inline-block text-xs font-medium px-3 py-1.5 rounded-md bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50">
+    Skip the orchestration hype. This is how it actually works.
+  </span>
+</div>
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-blue-500 dark:text-blue-400 font-semibold mb-1">The Core Insight</div>
+
+## It's Not About Orchestration. It's About Self-Propulsion.
+
+Most agent frameworks have an orchestrator at the center: something that pushes work to agents, monitors them, handles failures, reassigns. Gas Town inverts this entirely. Work is attached to agents and *executes itself*.
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-semibold mb-3">Traditional Multi-Agent</div>
+    <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+      <li><span className="text-red-400 mr-1.5">×</span> Central orchestrator bottleneck</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Session death = work death</li>
+      <li><span className="text-red-400 mr-1.5">×</span> State files that lie</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Mechanical health checks</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Context limits matter</li>
+      <li><span className="text-red-400 mr-1.5">×</span> Crashes need intervention</li>
+    </ul>
+  </div>
+  <div className="rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-green-500 dark:text-green-400 font-semibold mb-3">Gas Town</div>
+    <ul className="space-y-1.5 text-sm text-slate-600 dark:text-slate-400">
+      <li><span className="text-green-500 mr-1.5">✓</span> Work propels itself via hooks</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Sessions disposable, sandbox persists</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Reality is the source of truth</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> AI patrol with judgment</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Context externalized to git</li>
+      <li><span className="text-green-500 mr-1.5">✓</span> Self-healing by design</li>
+    </ul>
+  </div>
+</div>
+
+<div className="not-prose border-l-3 border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-blue-600 dark:text-blue-400">The key realization:</strong> autonomous multi-agent coordination doesn't require complex orchestration. It requires four simple primitives that reinforce each other: self-propelling work, ephemeral sessions, observable state, and AI patrol.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-blue-500 dark:text-blue-400 font-semibold mb-1">Insight #1</div>
+
+## Work Propels Itself
+
+Most agent systems have an orchestrator that pushes work to agents. Gas Town inverts this: work is attached to agents and executes itself.
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-semibold mb-3">Traditional</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">Orchestrator polls for work, assigns to agent, monitors completion, handles failures, reassigns. The orchestrator is a bottleneck and single point of failure.</div>
+  </div>
+  <div className="rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-green-500 dark:text-green-400 font-semibold mb-3">Gas Town</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">Work is written to agent's <code>hook_bead</code>. When session starts, hook fires automatically. Agent runs work. No orchestrator needed.</div>
+  </div>
+</div>
+
+```
+WORK ASSIGNMENT FLOW
+
+  gt sling issue-123 polecat/Toast
+       │
+       ▼
+  writes hook_bead field to agent's database row
+       │
+       ▼
+  session starts
+       │
+       ▼
+  SessionStart hook fires → gt prime --hook
+       │
+       ▼
+  agent reads hook → executes work → gt done
+```
+
+<div className="not-prose border-l-3 border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-blue-600 dark:text-blue-400">Why this matters:</strong> if an agent crashes mid-work, the hook is still set. Next session starts, hook fires, work continues. Zero human intervention. The work itself is the propulsion mechanism.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-blue-500 dark:text-blue-400 font-semibold mb-1">Insight #2</div>
+
+## Sessions Die, Sandboxes Live
+
+The key insight: agent identity and work state are completely decoupled from the session (context window).
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-semibold mb-3">Traditional</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">Agent session = agent state. When context fills, you either lose history or pay for expensive context management. Session death = work death.</div>
+  </div>
+  <div className="rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-green-500 dark:text-green-400 font-semibold mb-3">Gas Town</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">Session is disposable. Sandbox (git worktree + branch + beads) persists. Kill session anytime. New session inherits full state via git and hook.</div>
+  </div>
+</div>
+
+```
+SESSION LIFECYCLE
+
+  Session 1 → dies → Session 2 → dies → Session 3 → ... → Session N
+      │                 │                 │                    │
+      └─────────────────┴─────────────────┴────────────────────┘
+                                  │
+                                  ▼
+      Same branch. Same worktree. Same bead state. Accumulated cv_chain.
+```
+
+<div className="not-prose border-l-3 border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-blue-600 dark:text-blue-400">Why this matters:</strong> context windows are finite. Gas Town treats them as expendable resources. An agent can work for days across hundreds of sessions without losing context, because context is externalized to git.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-blue-500 dark:text-blue-400 font-semibold mb-1">Insight #3</div>
+
+## Observable State, Not Stored State
+
+Gas Town doesn't track state in files. It observes reality directly: tmux sessions, git branches, beads database.
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-semibold mb-3">Traditional</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">State file says agent is running. But process crashed. State file is now lying. System is confused. Manual intervention required.</div>
+  </div>
+  <div className="rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-green-500 dark:text-green-400 font-semibold mb-3">Gas Town</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">Is tmux session alive? That's the truth. Is branch pushed? Check git. What's the hook? Query beads. Reality is the source of truth.</div>
+  </div>
+</div>
+
+This is called **ZFC (Zero-File-Config)**. The daemon doesn't read state files. It observes:
+
+```
+STATE OBSERVATION
+
+  Session alive?  → tmux has-session -t name
+  Current work?   → SELECT hook_bead FROM agents
+  Changes pushed? → git log origin/branch..HEAD
+```
+
+<div className="not-prose border-l-3 border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-blue-600 dark:text-blue-400">Why this matters:</strong> state files corrupt. Processes crash between write and flush. By observing reality instead of tracking state, Gas Town eliminates an entire class of consistency bugs. Recovery is always possible because truth is discoverable.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-blue-500 dark:text-blue-400 font-semibold mb-1">Insight #4</div>
+
+## AI in the Patrol Loop
+
+The Witness isn't a script. It's an AI agent that makes judgment calls about other agents.
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-red-200 dark:border-red-900/50 bg-red-50/50 dark:bg-red-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-red-500 dark:text-red-400 font-semibold mb-3">Traditional</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">Health check: no output for 5 minutes = dead. But what if the agent is thinking about a hard problem? False positive. Kill productive work.</div>
+  </div>
+  <div className="rounded-lg border border-green-200 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-4">
+    <div className="text-[11px] uppercase tracking-widest text-green-500 dark:text-green-400 font-semibold mb-3">Gas Town</div>
+    <div className="text-sm text-slate-600 dark:text-slate-400">Witness (AI) checks agent. Reads recent output. Understands context. Decides: "still thinking" vs "actually stuck" vs "needs help".</div>
+  </div>
+</div>
+
+The patrol hierarchy uses **graduated intelligence**:
+
+```
+PATROL HIERARCHY
+
+  Daemon   │ Mechanical. 3-min heartbeat. Detects obvious failures.
+           ▼
+  Deacon   │ AI. Town-wide triage. Handles cross-rig issues.
+           ▼
+  Witness  │ AI. Per-rig intelligence. Understands agent context.
+```
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+    <div className="text-lg mb-1">🔍</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Contextual Judgment</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">AI patrol reads agent output and reasons about whether silence is productive or problematic.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+    <div className="text-lg mb-1">🛡️</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">No False Positives</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Mechanical checks can't understand nuance. AI watching AI prevents killing productive work.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+    <div className="text-lg mb-1">🔄</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Intelligent Recovery</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Witness can decide to restart, reassign, or escalate based on actual understanding of the situation.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4 hover:border-blue-300 dark:hover:border-blue-700 transition-colors">
+    <div className="text-lg mb-1">📊</div>
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Graduated Response</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">Daemon handles the obvious, Deacon coordinates across rigs, Witness handles nuanced per-agent decisions.</div>
+  </div>
+</div>
+
+<div className="not-prose border-l-3 border-blue-400 dark:border-blue-500 bg-blue-50/50 dark:bg-blue-950/20 rounded-r-lg p-4 my-6" style={{borderLeftWidth: '3px'}}>
+  <div className="text-sm text-slate-700 dark:text-slate-300">
+    <strong className="text-blue-600 dark:text-blue-400">Why this matters:</strong> mechanical health checks can't understand nuance. An AI watching AI can reason about whether silence is productive or problematic. This prevents false positives while catching real failures.
+  </div>
+</div>
+
+---
+
+<div className="not-prose text-[11px] uppercase tracking-[0.15em] text-blue-500 dark:text-blue-400 font-semibold mb-1">The Synthesis</div>
+
+## Why These Four Together
+
+Each insight enables the others. Remove one and the system degrades.
+
+```
+THE GAS TOWN COMPOSITION
+
+  Self-propelling work   → No orchestrator bottleneck
+        +
+  Ephemeral sessions     → Context limits don't matter
+        +
+  Observable state       → Crashes don't corrupt
+        +
+  AI patrol              → Intelligent recovery, no false positives
+
+  ════════════════════════════════════════════
+                        │
+                        ▼
+
+  Agents that run for days without human intervention.
+  20-30 agents working on a shared codebase, cycling
+  through sessions, self-healing from failures, for
+  as long as there's work to do.
+```
+
+<div className="not-prose grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Why others struggle</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">They optimize orchestration logic instead of the primitives that make orchestration unnecessary.</div>
+  </div>
+  <div className="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+    <div className="font-semibold text-sm text-slate-900 dark:text-slate-100 mb-1">Why Gas Town works</div>
+    <div className="text-xs text-slate-500 dark:text-slate-400">It treats sessions as disposable, work as self-propelling, state as observable, and patrol as judgment-based.</div>
+  </div>
+</div>
+
+## The Deeper Pattern
+
+What's actually happening here is simple: **the system externalizes everything fragile and automates only what can be made durable**.
+
+- Context is fragile → externalize it to git and beads
+- Sessions are fragile → make them disposable
+- State files are fragile → observe reality directly
+- Mechanical health checks are fragile → put AI where judgment is required
+
+That is the pattern. Not agent orchestration. Not prompt engineering. **System design that assumes LLMs and processes will fail, then routes around those failures by construction.**
+
+This is why Gas Town feels qualitatively different from most multi-agent demos. It's not more complicated. It's more honest about where reality breaks.
