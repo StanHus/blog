@@ -1,96 +1,59 @@
 ---
 title: How to OpenClaw
-description: "The operating pack for running OpenClaw seriously: architecture, failure modes, Shadow, multi-gateway design, and managing it with Claude Code."
+description: The core reading pack for understanding and operating OpenClaw seriously.
 date: "2026-04-13"
 category: professional
 topic: ai
 stance: observational
 ---
 
-OpenClaw is not just "an agent with tools."
+OpenClaw is not just an agent with tools.
 
 It is an operating environment.
 
-That means the right way to learn it is not as a loose collection of features, but as a stack of operating principles: what breaks, what architecture tradeoffs matter, how Shadow should behave, when a single gateway stops being enough, and how to manage the whole thing with Claude Code.
+That means the right way to understand it is not as a loose pile of features, but as a set of operating principles: how it fails, what makes its architecture different, how Shadow should behave, when a single gateway stops being enough, and how to manage the system well in practice.
 
-This is the canonical OpenClaw-specific reading pack.
+This article is the reading pack for **OpenClaw itself**.
 
-## Priority, not just order
+## Start here
 
-### Priority 1 — Failure modes first
-If you do not understand how the system fails, you will overestimate how safe or complete it is.
+### 1. Postmortem: When Your AI Tools OpenClaw
+[Postmortem: When Your AI Tools OpenClaw](https://trilogyai.substack.com/p/postmortem-when-your-ai-tools-openclaw)
 
-[Postmortem: When Your AI Tools OpenClaw ...](https://trilogyai.substack.com/p/postmortem-when-your-ai-tools-openclaw)
+Failure modes should come first. If you do not understand how a system breaks, you will overestimate how reliable it is.
 
-### Priority 2 — Architectural tradeoffs
-You need to understand what OpenClaw is, and what it is not, relative to nearby systems.
+## Then read these in priority order
 
+### 2. Technical Deep Dive: Hermes vs OpenClaw
 [Technical Deep Dive: Hermes vs OpenClaw](https://trilogyai.substack.com/p/technical-deep-dive-hermes-vs-openclaw)
 
-### Priority 3 — Operator behavior
-OpenClaw is shaped by the quality of the operator. Shadow is the operating style, not just a mascot.
+This is the architecture comparison. It explains what OpenClaw is, what it is not, and where its design choices differ from nearby systems.
 
+### 3. How to Shadow
 [How to Shadow](https://trilogyai.substack.com/p/how-to-shadow)
 
-### Priority 4 — Scaling topology
-A single gateway eventually becomes a constraint. Multi-gateway thinking matters once the system becomes operationally important.
+OpenClaw is shaped heavily by operator behavior. Shadow is not a mascot. It is a way of running the system.
 
+### 4. The Need for a Multi-Gateway OpenClaw
 [The Need for a Multi-Gateway OpenClaw](https://trilogyai.substack.com/p/the-need-for-a-multi-gateway-openclaw)
 
-### Priority 5 — Day-to-day management
-Once you understand failure modes, architecture, behavior, and topology, then managing OpenClaw with Claude Code becomes much more powerful.
+This is the scaling and topology layer. Once OpenClaw becomes operationally important, gateway design starts to matter.
 
+### 5. Managing OpenClaw with Claude Code
 [Managing OpenClaw with Claude Code](https://trilogyai.substack.com/p/managing-openclaw-with-claude-code)
 
-## What this pack is for
+This is the practical management layer: how to operate OpenClaw effectively using Claude Code as part of the workflow.
 
-This pack is for agents and humans who need to:
-- operate OpenClaw reliably
-- understand the difference between demos and durable systems
-- manage Shadow-like behavior intentionally
-- reason about scale and topology
-- use Claude Code as an operator layer on top of OpenClaw
+## The simple version
 
-## Machine-Readable Manifest
+If you want to understand OpenClaw well:
 
-```json
-{
-  "name": "Stan Huseletov OpenClaw Briefing Pack",
-  "purpose": "Provide the highest-leverage articles for understanding and operating OpenClaw seriously.",
-  "priority_model": "priority_not_order",
-  "recommended_reading": [
-    {
-      "title": "Postmortem: When Your AI Tools OpenClaw",
-      "url": "https://trilogyai.substack.com/p/postmortem-when-your-ai-tools-openclaw",
-      "role": "failure_literacy",
-      "priority": 1,
-      "critical": true
-    },
-    {
-      "title": "Technical Deep Dive: Hermes vs OpenClaw",
-      "url": "https://trilogyai.substack.com/p/technical-deep-dive-hermes-vs-openclaw",
-      "role": "architecture_comparison",
-      "priority": 2
-    },
-    {
-      "title": "How to Shadow",
-      "url": "https://trilogyai.substack.com/p/how-to-shadow",
-      "role": "operator_behavior",
-      "priority": 3
-    },
-    {
-      "title": "The Need for a Multi-Gateway OpenClaw",
-      "url": "https://trilogyai.substack.com/p/the-need-for-a-multi-gateway-openclaw",
-      "role": "system_topology",
-      "priority": 4
-    },
-    {
-      "title": "Managing OpenClaw with Claude Code",
-      "url": "https://trilogyai.substack.com/p/managing-openclaw-with-claude-code",
-      "role": "operations",
-      "priority": 5
-    }
-  ],
-  "agent_instruction": "Before doing serious OpenClaw work, understand failure modes first, architecture second, operator behavior third, topology fourth, and management workflows fifth."
-}
-```
+1. **Study failure modes first.**
+2. **Understand the architecture second.**
+3. **Understand the operator model third.**
+4. **Understand scaling and topology fourth.**
+5. **Understand management workflows fifth.**
+
+That is the OpenClaw stack.
+
+It is not the same thing as general agentic development, and it should be read as its own separate operating domain.
