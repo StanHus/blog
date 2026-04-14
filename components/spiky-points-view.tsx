@@ -189,6 +189,11 @@ export function SpikyPointsView() {
     })
   }, [activeTag])
 
+  const expandedPoint = expandedId ? pointsById.get(expandedId) ?? null : null
+  const expandedRelated = expandedPoint
+    ? expandedPoint.relatedIds.map((id) => pointsById.get(id)).filter(Boolean) as SpikyPoint[]
+    : []
+
   return (
     <div className="py-6">
       <div className="prose dark:prose-invert mb-8">
@@ -234,7 +239,6 @@ export function SpikyPointsView() {
 
         {filtered.map((point) => {
           const open = expandedId === point.id
-          const relatedPoints = point.relatedIds.map((id) => pointsById.get(id)).filter(Boolean) as SpikyPoint[]
 
           return (
             <div key={point.id} className="border-b border-slate-200 dark:border-slate-800 last:border-b-0">
@@ -256,76 +260,102 @@ export function SpikyPointsView() {
                   </div>
                   <div className="flex justify-end">
                     <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-950">
-                      {open ? "Collapse" : "Expand"}
-                      <span className={`transition-transform ${open ? "rotate-90" : "rotate-0"}`}>›</span>
+                      Expand
+                      <span className="transition-transform">›</span>
                     </span>
                   </div>
                 </div>
               </button>
-
-              <div
-                className={`grid transition-all duration-300 ease-out ${
-                  open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                }`}
-              >
-                <div className="overflow-hidden">
-                  <div className="px-4 pb-5">
-                    <div className="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-5 shadow-sm">
-                      <div className="mb-4">
-                        <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">{point.title}</h3>
-                        <div className="flex flex-wrap gap-1.5 mb-4">
-                          {point.tags.map((tag) => (
-                            <span key={tag} className={`text-[10px] px-2 py-1 rounded-full ${styleForTag(tag)}`}>
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <p className="text-sm leading-7 text-slate-700 dark:text-slate-300">{point.body}</p>
-                      </div>
-
-                      {point.links?.length ? (
-                        <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
-                          <div className="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold mb-3">
-                            Related links
-                          </div>
-                          <div className="flex flex-wrap gap-3">
-                            {point.links.map((link) => (
-                              <a
-                                key={link.href}
-                                href={link.href}
-                                className="text-sm font-medium text-blue-600 dark:text-blue-400 no-underline hover:underline"
-                              >
-                                {link.label} →
-                              </a>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-
-                      <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
-                        <div className="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold mb-3">
-                          Related SPVs
-                        </div>
-                        <div className="grid md:grid-cols-2 gap-3">
-                          {relatedPoints.map((related) => (
-                            <button
-                              key={related.id}
-                              onClick={() => setExpandedId(related.id)}
-                              className="text-left rounded-xl border border-slate-200 dark:border-slate-700 p-4 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors"
-                            >
-                              <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1.5">{related.title}</div>
-                              <p className="text-sm text-slate-600 dark:text-slate-400 leading-6">{related.oneLiner}</p>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           )
         })}
+      </div>
+
+      <div
+        className={`fixed inset-0 z-50 transition-all duration-300 ${
+          expandedPoint ? "pointer-events-auto" : "pointer-events-none"
+        }`}
+      >
+        <div
+          onClick={() => setExpandedId(null)}
+          className={`absolute inset-0 bg-slate-950/50 backdrop-blur-sm transition-opacity duration-300 ${
+            expandedPoint ? "opacity-100" : "opacity-0"
+          }`}
+        />
+
+        <div className="absolute inset-0 flex items-center justify-center p-4 md:p-8">
+          <div
+            className={`w-full max-w-3xl max-h-[88vh] overflow-y-auto rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl transition-all duration-300 ${
+              expandedPoint ? "opacity-100 scale-100 translate-y-0" : "opacity-0 scale-95 translate-y-4"
+            }`}
+          >
+            {expandedPoint ? (
+              <div className="p-6 md:p-8">
+                <div className="flex items-start justify-between gap-4 mb-6">
+                  <div>
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {expandedPoint.tags.map((tag) => (
+                        <span key={tag} className={`text-[10px] px-2 py-1 rounded-full ${styleForTag(tag)}`}>
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <h3 className="text-2xl md:text-3xl font-semibold text-slate-900 dark:text-slate-100 leading-tight">
+                      {expandedPoint.title}
+                    </h3>
+                  </div>
+                  <button
+                    onClick={() => setExpandedId(null)}
+                    className="rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900/60 transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+
+                <p className="text-base md:text-lg leading-8 text-slate-700 dark:text-slate-300 mb-8">
+                  {expandedPoint.body}
+                </p>
+
+                {expandedPoint.links?.length ? (
+                  <div className="pt-5 border-t border-slate-200 dark:border-slate-800">
+                    <div className="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold mb-3">
+                      Related links
+                    </div>
+                    <div className="flex flex-wrap gap-3">
+                      {expandedPoint.links.map((link) => (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          className="text-sm font-medium text-blue-600 dark:text-blue-400 no-underline hover:underline"
+                        >
+                          {link.label} →
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                <div className="pt-5 mt-5 border-t border-slate-200 dark:border-slate-800">
+                  <div className="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold mb-3">
+                    Related SPVs
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {expandedRelated.map((related) => (
+                      <button
+                        key={related.id}
+                        onClick={() => setExpandedId(related.id)}
+                        className="text-left rounded-xl border border-slate-200 dark:border-slate-700 p-4 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors"
+                      >
+                        <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1.5">{related.title}</div>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-6">{related.oneLiner}</p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
       </div>
     </div>
   )
