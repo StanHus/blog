@@ -16,12 +16,12 @@ type SpikyPoint = {
 const points: SpikyPoint[] = [
   {
     id: "shortcuts-over-friction",
-    title: "Give people shortcuts.",
+    title: "I do not need to understand it to use it.",
     oneLiner:
-      "If there is a faster path to action, I want that path instead of making people earn it through explanation.",
+      "Give me the shortcut. If there is a faster path to action, I want that path instead of making me earn it through explanation.",
     body:
-      "I often include Claude artifacts, structured payloads, and copy-pasteable outputs because that is how I personally consume material. I do not enjoy long explanation when the real goal is action. If someone wants to use an agent, brief an assistant, or move straight into execution, I would rather give them a direct path than force them through an essay first.",
-    tags: ["ux", "ai", "shortcuts", "consumption"],
+      "I do not like reading manuals when the real goal is action. I often include Claude artifacts, structured payloads, and copy-pasteable outputs in my writing because that is how I personally consume material. I do not need to understand the underlying mechanics of every tool I touch. If someone wants to use an agent or brief an assistant, I would rather give them a direct path to execution than force them through an essay first.",
+    tags: ["ux", "action", "shortcuts", "consumption"],
     status: "confirmed",
     links: [
       {
@@ -29,7 +29,18 @@ const points: SpikyPoint[] = [
         href: "/posts/how-to-do-agentic-development",
       },
     ],
-    relatedIds: ["trust-strong-sources", "build-something-now"],
+    relatedIds: ["trust-strong-sources", "never-show-the-strings"],
+  },
+  {
+    id: "never-show-the-strings",
+    title: "Never show the audience the strings.",
+    oneLiner:
+      "Understanding the tech is for the builders. Experiencing the magic is for the buyers.",
+    body:
+      "To the person building it, the illusion doesn't exist. You see the matrix: the LLM core, the routing logic, the RAG pipelines, the latency, the failure points. But to the audience, the process is a literal black box—and it should stay that way. Magic is simply a lack of mechanical context. Explaining the agentic layers to a non-technical person destroys the magic. It forces them to think about mechanics, causing them to over-analyze and look for flaws. Sell the spell, not the wand. You want them mesmerized by the outcome, not evaluating the process.",
+    tags: ["product", "sales", "ai", "magic"],
+    status: "proposed",
+    relatedIds: ["shortcuts-over-friction", "coherence-over-feature-collection"],
   },
   {
     id: "trust-strong-sources",
