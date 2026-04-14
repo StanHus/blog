@@ -6,9 +6,21 @@ function Image(props: ImageProps) {
   return <NextImage {...props} style={{ height: 'auto', ...props.style }} />
 }
 
+function CustomLink(props: any) {
+  const href = props.href
+  const isInternalLink = href && (href.startsWith('/') || href.startsWith('#'))
+
+  if (isInternalLink) {
+    return <a {...props} />
+  }
+
+  return <a target="_blank" rel="noopener noreferrer" {...props} />
+}
+
 const components = {
   Image,
   CopyButton,
+  a: CustomLink,
 }
 
 interface MdxProps {
