@@ -175,22 +175,19 @@ function styleForTag(tag: string) {
 
 export function SpikyPointsView() {
   const [activeTag, setActiveTag] = useState<string>("all")
-  const [expandedId, setExpandedId] = useState<string | null>(points[0]?.id ?? null)
-  const [statusFilter, setStatusFilter] = useState<"all" | "confirmed" | "proposed">("all")
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   const pointsById = useMemo(() => new Map(points.map((point) => [point.id, point])), [])
 
   const tags = useMemo(() => {
-    return ["all", ...Array.from(new Set(points.flatMap((point) => point.tags))).sort()]
+    return Array.from(new Set(points.flatMap((point) => point.tags))).sort()
   }, [])
 
   const filtered = useMemo(() => {
     return points.filter((point) => {
-      const tagMatch = activeTag === "all" || point.tags.includes(activeTag)
-      const statusMatch = statusFilter === "all" || point.status === statusFilter
-      return tagMatch && statusMatch
+      return activeTag === "all" || point.tags.includes(activeTag)
     })
-  }, [activeTag, statusFilter])
+  }, [activeTag])
 
   return (
     <div className="py-6">
@@ -199,68 +196,40 @@ export function SpikyPointsView() {
         <p className="text-xl text-slate-600 dark:text-slate-400">
           My carefully curated opinions about everything.
         </p>
-        <p>
-          Short, opinionated, and easy to scan. Each one opens into a cleaner card with a bit more context.
-          Some are settled. Some are drafts worth testing. Together they map a broader point of view about work,
-          taste, trust, and how to move through the world.
-        </p>
       </div>
 
-      <div className="not-prose space-y-4 mb-8">
-        <div className="flex flex-wrap gap-2">
+      <div className="not-prose mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50 p-3">
+        <div className="text-sm text-slate-500 dark:text-slate-400">Tags</div>
+        <button
+          onClick={() => setActiveTag("all")}
+          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+            activeTag === "all"
+              ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
+              : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950"
+          }`}
+        >
+          all
+        </button>
+        {tags.map((tag) => (
           <button
-            onClick={() => setStatusFilter("all")}
+            key={tag}
+            onClick={() => setActiveTag(tag)}
             className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-              statusFilter === "all"
+              activeTag === tag
                 ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-                : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300"
+                : `border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 ${styleForTag(tag)}`
             }`}
           >
-            All
+            {tag}
           </button>
-          <button
-            onClick={() => setStatusFilter("confirmed")}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-              statusFilter === "confirmed"
-                ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-                : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300"
-            }`}
-          >
-            Confirmed
-          </button>
-          <button
-            onClick={() => setStatusFilter("proposed")}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-              statusFilter === "proposed"
-                ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-                : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300"
-            }`}
-          >
-            Proposed
-          </button>
-        </div>
-
-        <div className="flex flex-wrap gap-2">
-          {tags.map((tag) => (
-            <button
-              key={tag}
-              onClick={() => setActiveTag(tag)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                activeTag === tag
-                  ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-                  : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
 
-      <div className="not-prose overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 px-4 py-3 text-xs uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50">
-          <div>Point of view</div>
+      <div className="not-prose overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/40">
+        <div className="grid grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_auto] gap-4 px-4 py-3 text-xs uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50">
+          <div>Spiky point of view</div>
           <div>Tags</div>
+          <div className="text-right">Open</div>
         </div>
 
         {filtered.map((point) => {
@@ -273,28 +242,23 @@ export function SpikyPointsView() {
                 onClick={() => setExpandedId(open ? null : point.id)}
                 className="w-full text-left px-4 py-4 hover:bg-slate-50 dark:hover:bg-slate-900/40 transition-colors"
               >
-                <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-4 items-start">
+                <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)_auto] gap-4 items-start">
                   <div>
-                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                      <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{point.title}</span>
-                      <span
-                        className={`text-[10px] uppercase tracking-[0.12em] px-2 py-0.5 rounded-full ${
-                          point.status === "confirmed"
-                            ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300"
-                            : "bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300"
-                        }`}
-                      >
-                        {point.status}
-                      </span>
-                    </div>
+                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1.5">{point.title}</div>
                     <p className="text-sm text-slate-600 dark:text-slate-400 leading-6">{point.oneLiner}</p>
                   </div>
-                  <div className="flex flex-wrap gap-1.5 md:justify-end">
+                  <div className="flex flex-wrap gap-1.5 md:justify-start">
                     {point.tags.map((tag) => (
                       <span key={tag} className={`text-[10px] px-2 py-1 rounded-full ${styleForTag(tag)}`}>
                         {tag}
                       </span>
                     ))}
+                  </div>
+                  <div className="flex justify-end">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-950">
+                      {open ? "Collapse" : "Expand"}
+                      <span className={`transition-transform ${open ? "rotate-90" : "rotate-0"}`}>›</span>
+                    </span>
                   </div>
                 </div>
               </button>
