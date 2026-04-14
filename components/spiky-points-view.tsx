@@ -10,6 +10,7 @@ type SpikyPoint = {
   tags: string[]
   status: "confirmed" | "proposed"
   links?: { label: string; href: string }[]
+  relatedIds: [string, string]
 }
 
 const points: SpikyPoint[] = [
@@ -17,7 +18,7 @@ const points: SpikyPoint[] = [
     id: "shortcuts-over-friction",
     title: "Give people shortcuts.",
     oneLiner:
-      "If there is a faster, more native path to action, I want that path instead of making people wade through explanation first.",
+      "If there is a faster path to action, I want that path instead of making people earn it through explanation.",
     body:
       "I often include Claude artifacts, structured payloads, and copy-pasteable outputs because that is how I personally consume material. I do not enjoy long explanation when the real goal is action. If someone wants to use an agent, brief an assistant, or move straight into execution, I would rather give them a direct path than force them through an essay first.",
     tags: ["ux", "ai", "shortcuts", "consumption"],
@@ -28,16 +29,18 @@ const points: SpikyPoint[] = [
         href: "/posts/how-to-do-agentic-development",
       },
     ],
+    relatedIds: ["trust-strong-sources", "build-something-now"],
   },
   {
-    id: "trusted-sources-beat-total-verification",
-    title: "You do not have to verify everything.",
+    id: "trust-strong-sources",
+    title: "Trust strong sources and move.",
     oneLiner:
-      "In a world of fast-moving knowledge, good-enough trust in strong sources is often more rational than pretending you can independently validate everything.",
+      "If I trust the source, I would rather move with good-enough conviction than pretend I can independently verify everything.",
     body:
-      "I learn from people like Andrej Karpathy and many others whose work I trust. That does not mean blind faith. It means being realistic about the limits of time and attention. If I trust the source, and the cost of full independent verification is too high, I will often move forward with good-enough confidence rather than stall in fake rigor.",
+      "I learn from people like Andrej Karpathy and from teams whose work I trust. That does not mean blind faith. It means being realistic about the limits of time and attention. If I start trying to deconstruct everything from first principles every time, I will never get anything done. In fast-moving technical domains, judgment often means knowing when trust is rational.",
     tags: ["learning", "trust", "speed", "judgment"],
     status: "confirmed",
+    relatedIds: ["what-would-vin-claudel-do", "build-something-now"],
   },
   {
     id: "plan-first",
@@ -58,6 +61,7 @@ const points: SpikyPoint[] = [
         href: "/posts/how-to-do-agentic-development",
       },
     ],
+    relatedIds: ["build-something-now", "what-would-vin-claudel-do"],
   },
   {
     id: "generalists-specialists",
@@ -67,13 +71,14 @@ const points: SpikyPoint[] = [
     body:
       "I do not think the winning move is trying to out-generalize the model. The human should stay broad and strategic. The tool should be narrow, sharp, and designed for repeated use. That is how you get leverage instead of building a vague assistant that competes with its own foundation model.",
     tags: ["tools", "ai", "product", "strategy"],
-    status: "proposed",
+    status: "confirmed",
     links: [
       {
         label: "Generalist Humans, Specialist Tools",
         href: "/posts/generalist-humans-specialist-tools",
       },
     ],
+    relatedIds: ["coherence-over-feature-collection", "build-something-now"],
   },
   {
     id: "hide-the-status-play-the-board",
@@ -90,16 +95,17 @@ const points: SpikyPoint[] = [
         href: "/posts/real-life-lichess-zen-mode",
       },
     ],
+    relatedIds: ["trust-strong-sources", "make-it-resonate-with-you"],
   },
   {
     id: "coherence-over-feature-collection",
-    title: "Good systems feel coherent before they feel impressive.",
+    title: "Good systems should feel coherent before they feel impressive.",
     oneLiner:
       "I trust a system more when its parts fit together cleanly than when it throws every feature at me at once.",
     body:
-      "A lot of AI products try to win by feature accumulation. I care more about whether the pieces reinforce one another in a way that makes the system easier to reason about. Coherence scales better than novelty.",
+      "A lot of AI products try to win by feature accumulation. I care more about whether the pieces reinforce one another in a way that makes the system easier to reason about. Coherence scales better than novelty. If the architecture feels clean, I will trust it more than a loud product demo with too many moving parts.",
     tags: ["systems", "design", "ai", "taste"],
-    status: "proposed",
+    status: "confirmed",
     links: [
       {
         label: "What Makes OpenClaw Different",
@@ -110,6 +116,46 @@ const points: SpikyPoint[] = [
         href: "/posts/what-makes-gas-town-different",
       },
     ],
+    relatedIds: ["generalists-specialists", "what-would-vin-claudel-do"],
+  },
+  {
+    id: "what-would-vin-claudel-do",
+    title: "When a great team has already solved the problem, steal their pattern instead of improvising your own mediocrity.",
+    oneLiner:
+      "If Claude Code people already found the best pattern, my default move is to learn it and use it, not argue with it for sport.",
+    body:
+      "This is not neutrality. I think the Claude Code team has already solved a lot of the hardest architectural problems better than most people building agents from scratch. If I can inspect those patterns, extract them, and reuse them, that is the obvious move. Trying to reinvent everything from my own half-formed intuitions is often just ego disguised as rigor.",
+    tags: ["ai", "patterns", "trust", "architecture"],
+    status: "confirmed",
+    links: [
+      {
+        label: "What Would Vin Claudel Do",
+        href: "https://trilogyai.substack.com/p/what-would-vin-claudel-do?utm_source=profile&utm_medium=reader2",
+      },
+    ],
+    relatedIds: ["trust-strong-sources", "plan-first"],
+  },
+  {
+    id: "build-something-now",
+    title: "Build something now. Improve it later.",
+    oneLiner:
+      "A real thing that exists beats a more sophisticated thing you are still thinking about.",
+    body:
+      "I would rather publish the package, ship the prototype, or put the idea into the world than spend too long trying to make it perfect in private. A fast, opinionated first version creates feedback, momentum, and actual use. You can improve what exists. You cannot improve the thing you never made.",
+    tags: ["shipping", "speed", "making", "execution"],
+    status: "confirmed",
+    relatedIds: ["plan-first", "make-it-resonate-with-you"],
+  },
+  {
+    id: "make-it-resonate-with-you",
+    title: "Make things that resonate with you, not just things that look strategically correct.",
+    oneLiner:
+      "A project gets better when I actually enjoy it, even if that makes it more opinionated, stranger, or less optimized for broad approval.",
+    body:
+      "I do not mind if a name is a little stupid, funny, or overly specific, if it genuinely feels like mine. Personality is not always the maximally optimized growth strategy, but it is often the thing that makes me care enough to keep building. I would rather make something alive and resonant than something sanitized and forgettable.",
+    tags: ["taste", "personality", "making", "creative"],
+    status: "confirmed",
+    relatedIds: ["build-something-now", "shortcuts-over-friction"],
   },
 ]
 
@@ -132,6 +178,8 @@ export function SpikyPointsView() {
   const [expandedId, setExpandedId] = useState<string | null>(points[0]?.id ?? null)
   const [statusFilter, setStatusFilter] = useState<"all" | "confirmed" | "proposed">("all")
 
+  const pointsById = useMemo(() => new Map(points.map((point) => [point.id, point])), [])
+
   const tags = useMemo(() => {
     return ["all", ...Array.from(new Set(points.flatMap((point) => point.tags))).sort()]
   }, [])
@@ -153,7 +201,8 @@ export function SpikyPointsView() {
         </p>
         <p>
           Short, opinionated, and easy to scan. Each one opens into a cleaner card with a bit more context.
-          Some are settled. Some are drafts worth testing.
+          Some are settled. Some are drafts worth testing. Together they map a broader point of view about work,
+          taste, trust, and how to move through the world.
         </p>
       </div>
 
@@ -216,6 +265,7 @@ export function SpikyPointsView() {
 
         {filtered.map((point) => {
           const open = expandedId === point.id
+          const relatedPoints = point.relatedIds.map((id) => pointsById.get(id)).filter(Boolean) as SpikyPoint[]
 
           return (
             <div key={point.id} className="border-b border-slate-200 dark:border-slate-800 last:border-b-0">
@@ -225,7 +275,7 @@ export function SpikyPointsView() {
               >
                 <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_auto] gap-4 items-start">
                   <div>
-                    <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                       <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{point.title}</span>
                       <span
                         className={`text-[10px] uppercase tracking-[0.12em] px-2 py-0.5 rounded-full ${
@@ -287,6 +337,24 @@ export function SpikyPointsView() {
                           </div>
                         </div>
                       ) : null}
+
+                      <div className="pt-4 mt-4 border-t border-slate-200 dark:border-slate-800">
+                        <div className="text-[11px] uppercase tracking-[0.15em] text-slate-500 dark:text-slate-400 font-semibold mb-3">
+                          Related SPVs
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-3">
+                          {relatedPoints.map((related) => (
+                            <button
+                              key={related.id}
+                              onClick={() => setExpandedId(related.id)}
+                              className="text-left rounded-xl border border-slate-200 dark:border-slate-700 p-4 hover:border-slate-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors"
+                            >
+                              <div className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-1.5">{related.title}</div>
+                              <p className="text-sm text-slate-600 dark:text-slate-400 leading-6">{related.oneLiner}</p>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
