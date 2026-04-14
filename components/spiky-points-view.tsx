@@ -176,6 +176,7 @@ function styleForTag(tag: string) {
 export function SpikyPointsView() {
   const [activeTag, setActiveTag] = useState<string>("all")
   const [expandedId, setExpandedId] = useState<string | null>(null)
+  const [tagsOpen, setTagsOpen] = useState(false)
 
   const pointsById = useMemo(() => new Map(points.map((point) => [point.id, point])), [])
 
@@ -203,31 +204,64 @@ export function SpikyPointsView() {
         </p>
       </div>
 
-      <div className="not-prose mb-6 flex flex-wrap items-center gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50 p-3">
-        <div className="text-sm text-slate-500 dark:text-slate-400">Tags</div>
+      <div className="not-prose mb-6 relative flex items-center gap-3">
         <button
-          onClick={() => setActiveTag("all")}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-            activeTag === "all"
-              ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-              : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950"
+          onClick={() => setTagsOpen((open) => !open)}
+          className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+        >
+          Tags
+          <span className={`transition-transform ${tagsOpen ? "rotate-180" : "rotate-0"}`}>⌄</span>
+        </button>
+
+        {activeTag !== "all" ? (
+          <button
+            onClick={() => setActiveTag("all")}
+            className="rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-950"
+          >
+            {activeTag} ×
+          </button>
+        ) : null}
+
+        <div
+          className={`absolute left-0 top-14 z-20 w-[min(720px,calc(100vw-2rem))] rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl transition-all duration-200 ${
+            tagsOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"
           }`}
         >
-          all
-        </button>
-        {tags.map((tag) => (
-          <button
-            key={tag}
-            onClick={() => setActiveTag(tag)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-              activeTag === tag
-                ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-                : `border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 ${styleForTag(tag)}`
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
+          <div className="p-4 border-b border-slate-200 dark:border-slate-800">
+            <div className="text-sm font-medium text-slate-900 dark:text-slate-100">Filter by tags</div>
+          </div>
+          <div className="p-4 flex flex-wrap gap-2 max-h-72 overflow-y-auto">
+            <button
+              onClick={() => {
+                setActiveTag("all")
+                setTagsOpen(false)
+              }}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                activeTag === "all"
+                  ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
+                  : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950"
+              }`}
+            >
+              all
+            </button>
+            {tags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => {
+                  setActiveTag(tag)
+                  setTagsOpen(false)
+                }}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                  activeTag === tag
+                    ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
+                    : `border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 ${styleForTag(tag)}`
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
       <div className="not-prose overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/40">
