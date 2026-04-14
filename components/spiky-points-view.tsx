@@ -204,64 +204,55 @@ export function SpikyPointsView() {
         </p>
       </div>
 
-      <div className="not-prose mb-6 relative flex items-center gap-3">
+      <div className="not-prose mb-6 relative">
         <button
           onClick={() => setTagsOpen((open) => !open)}
-          className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-900 transition-colors"
+          className="inline-flex items-center justify-between min-w-[200px] rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/50 px-4 py-2.5 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
         >
-          Tags
-          <span className={`transition-transform ${tagsOpen ? "rotate-180" : "rotate-0"}`}>⌄</span>
+          <span>{activeTag === "all" ? "Filter by tag..." : `Tag: ${activeTag}`}</span>
+          <svg className={`w-4 h-4 ml-2 transition-transform duration-200 ${tagsOpen ? "rotate-180" : "rotate-0"}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </button>
 
-        {activeTag !== "all" ? (
-          <button
-            onClick={() => setActiveTag("all")}
-            className="rounded-full border border-slate-200 dark:border-slate-700 px-3 py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-950"
-          >
-            {activeTag} ×
-          </button>
-        ) : null}
-
-        <div
-          className={`absolute left-0 top-14 z-20 w-[min(720px,calc(100vw-2rem))] rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl transition-all duration-200 ${
-            tagsOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-2 pointer-events-none"
-          }`}
-        >
-          <div className="p-4 border-b border-slate-200 dark:border-slate-800">
-            <div className="text-sm font-medium text-slate-900 dark:text-slate-100">Filter by tags</div>
-          </div>
-          <div className="p-4 flex flex-wrap gap-2 max-h-72 overflow-y-auto">
-            <button
-              onClick={() => {
-                setActiveTag("all")
-                setTagsOpen(false)
-              }}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                activeTag === "all"
-                  ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-                  : "border-slate-200 text-slate-600 dark:border-slate-700 dark:text-slate-300 bg-white dark:bg-slate-950"
-              }`}
-            >
-              all
-            </button>
-            {tags.map((tag) => (
+        {tagsOpen ? (
+          <>
+            <div 
+              className="fixed inset-0 z-10" 
+              onClick={() => setTagsOpen(false)} 
+            />
+            <div className="absolute left-0 top-[calc(100%+8px)] z-20 w-[240px] rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-xl overflow-hidden py-1 max-h-[60vh] overflow-y-auto">
               <button
-                key={tag}
                 onClick={() => {
-                  setActiveTag(tag)
+                  setActiveTag("all")
                   setTagsOpen(false)
                 }}
-                className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-                  activeTag === tag
-                    ? "bg-slate-900 text-white border-slate-900 dark:bg-slate-100 dark:text-slate-900 dark:border-slate-100"
-                    : `border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950 ${styleForTag(tag)}`
-                }`}
+                className="w-full flex items-center px-4 py-2.5 text-sm text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
               >
-                {tag}
+                <div className={`w-4 h-4 mr-3 rounded border flex items-center justify-center ${activeTag === "all" ? "bg-blue-500 border-blue-500" : "border-slate-300 dark:border-slate-600"}`}>
+                  {activeTag === "all" && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                </div>
+                <span className="text-slate-700 dark:text-slate-300">All tags</span>
               </button>
-            ))}
-          </div>
-        </div>
+              
+              {tags.filter(t => t !== "all").map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => {
+                    setActiveTag(tag)
+                    setTagsOpen(false)
+                  }}
+                  className="w-full flex items-center px-4 py-2.5 text-sm text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+                >
+                  <div className={`w-4 h-4 mr-3 rounded border flex items-center justify-center ${activeTag === tag ? "bg-blue-500 border-blue-500" : "border-slate-300 dark:border-slate-600"}`}>
+                    {activeTag === tag && <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>}
+                  </div>
+                  <span className="text-slate-700 dark:text-slate-300">{tag}</span>
+                </button>
+              ))}
+            </div>
+          </>
+        ) : null}
       </div>
 
       <div className="not-prose overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/40">
