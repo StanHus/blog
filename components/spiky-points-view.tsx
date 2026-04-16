@@ -43,6 +43,17 @@ const points: SpikyPoint[] = [
     relatedIds: ["shortcuts-over-friction", "coherence-over-feature-collection"],
   },
   {
+    id: "the-average-person",
+    title: "Think of how stupid the average person is...",
+    oneLiner:
+      "George Carlin said it best: '...and realize half of them are stupider than that.' In most specialized domains, I assume I am in the bottom half.",
+    body:
+      "This is not just a joke about other people. It is a discipline for intellectual honesty. In almost every specialized field, I am the below-average participant. The key to making progress—or even having a useful conversation—is accurately diagnosing where you sit on that curve. If you do not know you are the ignorant one in the room, you cannot ask the right questions. Stupidity is fine as a starting state; refusing to admit it is fatal.",
+    tags: ["learning", "behavior", "judgment", "honesty"],
+    status: "confirmed",
+    relatedIds: ["trust-strong-sources", "hide-the-status-play-the-board"],
+  },
+  {
     id: "trust-strong-sources",
     title: "Trust strong sources and move.",
     oneLiner:
