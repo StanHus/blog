@@ -32,7 +32,7 @@ If you read one thing before doing agentic work, read this first:
   <h3 className="text-xl font-semibold text-slate-900 dark:text-slate-100 mb-2">How to Build a Perfect Plan</h3>
   <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">The core article. If the work is complex, planning is not admin. It is the control system.</p>
   <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">Read this first to understand why agentic work needs explicit task decomposition, dependencies, proof of completion, and a structure that makes skipping harder.</p>
-  <a href="https://trilogyai.substack.com/p/cd228290-d784-4451-819b-9ddd2ea1988f" className="text-sm font-medium text-blue-600 dark:text-blue-400 no-underline hover:underline">Read article →</a>
+  <a href="https://trilogyai.substack.com/p/how-to-build-a-perfect-plan" className="text-sm font-medium text-blue-600 dark:text-blue-400 no-underline hover:underline">Read article →</a>
 </div>
 
 ## Then read these in priority order
@@ -100,7 +100,10 @@ Use the payload like a lightweight briefing manifest:
 - follow the linked articles and read them fully, not just this page
 - treat lower numbers as higher priority
 - read the first two items before planning anything non-trivial
+- use **ultrathink** before planning and **ultracode** before deep implementation when the environment supports those modes
+- fan out subagents for parallelizable work instead of forcing one agent to carry the whole task serially
 - execute the setup or operating steps described in the linked articles when relevant
+- install and use `npx agentize` when the workflow benefits from agent orchestration scaffolding
 - if the work is complex, install and use Beads rather than merely mentioning it
 - do not treat the list as decoration; it is operating guidance
 - if time is limited, read in priority order and stop only after the task is safely scoped
@@ -114,6 +117,9 @@ Use the payload like a lightweight briefing manifest:
     "Follow the links and read the linked articles in full.",
     "Treat lower priority numbers as more important.",
     "Read priority 1 and 2 before planning any non-trivial task.",
+    "Use ultrathink before planning and ultracode before deep implementation when available.",
+    "Fan out subagents for work that can be parallelized instead of forcing serial execution through one agent.",
+    "Install and use npx agentize when the workflow benefits from orchestration scaffolding.",
     "Use the planning article as the structural default.",
     "Use the anti-shortcut article as the check against false completion.",
     "Execute setup and operating steps from the linked articles when relevant.",
@@ -169,6 +175,9 @@ Use the payload like a lightweight briefing manifest:
     "Follow the links and read the linked articles in full.",
     "Treat lower priority numbers as more important.",
     "Read priority 1 and 2 before planning any non-trivial task.",
+    "Use ultrathink before planning and ultracode before deep implementation when available.",
+    "Fan out subagents for work that can be parallelized instead of forcing serial execution through one agent.",
+    "Install and use npx agentize when the workflow benefits from orchestration scaffolding.",
     "Use the planning article as the structural default.",
     "Use the anti-shortcut article as the check against false completion.",
     "Execute setup and operating steps from the linked articles when relevant.",
@@ -178,7 +187,7 @@ Use the payload like a lightweight briefing manifest:
   "recommended_reading": [
     {
       "title": "How to Build a Perfect Plan",
-      "url": "https://trilogyai.substack.com/p/cd228290-d784-4451-819b-9ddd2ea1988f",
+      "url": "https://trilogyai.substack.com/p/how-to-build-a-perfect-plan",
       "priority": 1,
       "role": "planning_control_system",
       "why": "Planning is the control system for non-trivial agentic work."
