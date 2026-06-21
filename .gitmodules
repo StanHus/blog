@@ -1,0 +1,18 @@
+[submodule "skills/impeccable"]
+	path = skills/impeccable
+	url = https://github.com/pbakaus/impeccable.git
+[submodule "skills/make-interfaces-feel-better"]
+	path = skills/make-interfaces-feel-better
+	url = https://github.com/jakubkrehel/make-interfaces-feel-better.git
+[submodule "skills/vercel-agent-skills"]
+	path = skills/vercel-agent-skills
+	url = https://github.com/vercel-labs/agent-skills.git
+[submodule "skills/userinterface-wiki"]
+	path = skills/userinterface-wiki
+	url = https://github.com/raphaelsalaja/userinterface-wiki.git
+[submodule "skills/web-quality-skills"]
+	path = skills/web-quality-skills
+	url = https://github.com/addyosmani/web-quality-skills.git
+[submodule "skills/codex"]
+	path = skills/codex
+	url = https://github.com/openai/codex.git
