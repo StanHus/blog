@@ -1,0 +1,19 @@
+---
+title: The agent bus
+description: One loop and one bus that ran fifty-six agents on a single Mac mini for two months. Code and write-up land here.
+---
+
+**Placeholder.** This page will hold one code sample and the story around it.
+
+## What will be here
+
+Two small pieces of Python, stdlib only, that every daemon in a fifty-six-agent fabric had in common:
+
+- **The loop.** One `tick()` that drains an inbox, answers four directive kinds any agent understands, keeps a circuit breaker, audits every event, runs the agent's own work, and heartbeats. Subclasses overrode two methods and inherited the rest.
+- **The bus.** Messages are JSON files delivered by atomic rename. Request and response with correlation ids and a timeout, no broker, no ports, no dependencies. Two machines shared one bus because the directory lived in iCloud.
+
+And the part that matters more than the code: what it carried, what broke, the external review that followed, and what changed because of it.
+
+## Until then
+
+The current source is public at [StanHus/agent-bus](https://github.com/StanHus/agent-bus). The write-up here will track its revisions.
